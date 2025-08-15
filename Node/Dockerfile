@@ -1,6 +1,6 @@
 FROM node:20
 WORKDIR /app
-RUN npm install
+RUN apt-get update
 COPY app.js .
 ADD https://example.com/data.json .
 EXPOSE 3000
