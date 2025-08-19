@@ -12,7 +12,7 @@ services:
   
 
   db:
-    image:
+    image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: mydb
@@ -24,7 +24,7 @@ services:
 volumes:
   dbdata:
 
-network:
+networks:
   appnet:
 
 
