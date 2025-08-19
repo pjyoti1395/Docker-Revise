@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  web:
+    image: nginx:latest
+    networks:
+      - appnet
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  
+
+  db:
+    image:
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - appnet
+
+volumes:
+  dbdata:
+
+network:
+  appnet:
+
+
+
+
+
+  #this is for 2 layer architecture  frontend and database
