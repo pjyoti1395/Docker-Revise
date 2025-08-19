@@ -1,3 +1,5 @@
+  #this is for 2 layer architecture  frontend and database
+
 version: '3.9'
 
 services:
@@ -6,7 +8,7 @@ services:
     networks:
       - appnet
     ports:
-      - "8080:80"
+      - "8081:80"
     depends_on:
       - db
   
@@ -31,4 +33,3 @@ networks:
 
 
 
-  #this is for 2 layer architecture  frontend and database

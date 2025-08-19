@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    image:  nginx:latest
+    container_name: NginxSingleLayerDockerComposeContainer
+    ports:
+      - "2000:80"
+    restart: always 
+    volumes:
+      - db_data:/var/lib/nginx
+    networks:
+      - nginx_network
+ 
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+  db_data:
+#secrets:
+#configs:
+
+
+
+
+
+
+
+# 1. Configs
+# What it is: A way to provide configuration files (like .cnf, .conf, .ini, etc.) into a container.
+# Why use: Instead of baking configs into the image, you can inject them dynamically.
+# How it works: You define the config in docker-compose.yml → Docker makes it available → container mounts it.
+# Example from your snippet:
+# configs:
+#   mydb_config:
+#     file: ./mysql-custom.cnf
+# This means:
+# Take the file mysql-custom.cnf from your host machine.
+# Store it as a Docker "config" object named mydb_config.
+# Mount it inside the container at the given target location.
+# Inside the service:
+# configs:
+#   - source: mydb_config
+#     target: /etc/mysql/conf.d/custom.cnf
+# 👉 This places your config file into MySQL’s config directory so it overrides default settings.
+# 🔹 2. Secrets
+# What it is: A secure way to pass sensitive information (like passwords, API keys).
+# Why use: More secure than plain environment variables (environment:), because secrets are not exposed in container logs or docker inspect.
+# How it works: You define a secret in Compose → Docker makes it available as a file inside /run/secrets/<secret_name> by default.
+# Example:
+# secrets:
+#   db_root_password:
+#     file: ./secrets/db_root_password.txt
+# This means:
+# Read the file ./secrets/db_root_password.txt from your host.
+# Store it as a Docker "secret" called db_root_password.
+# Inside the container, this secret can be accessed at /run/secrets/db_root_password.
+# And in service:
+# secrets:
+#   - db_root_password
+# 👉 Now your app can safely read the DB password from that file instead of hardcoding it.
+# 🔹 3. Volumes
+# What it is: Persistent storage for containers.
+# Why use: Containers are ephemeral (they disappear when stopped). Volumes let you keep data (like databases, logs, uploaded files) outside the container lifecycle.
+# How it works: You declare a volume in Compose → mount it to a container directory → data persists even if the container is removed.
+# Example:
+# volumes:
+#   db_data: {}
+# In the service:
+# volumes:
+#   - db_data:/var/lib/mysql
+# 👉 This keeps MySQL data persistent across container restarts.
+# ✅ Summary:
+# Configs → for non-sensitive configuration files
+# Secrets → for sensitive credentials
+# Volumes → for persistent data storage

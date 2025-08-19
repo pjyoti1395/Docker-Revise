@@ -1,0 +1,30 @@
+version: '2.0'
+services:
+  frontend:
+    build: ./frontend
+    ports: 
+      - "8090:80"
+    depends_on:
+      - backend   # frontend waits for backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db        # backend waits for db
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD:  rootpassword
+      MySQL_DATABASE: myapp
+    ports:
+      - "3306:3306"
+
+
+#build: ./frontend mean?
+#build: → tells Docker Compose that it should build a custom image for this service instead of pulling one directly from Docker Hub.
+#./frontend → is the path to the directory containing the Dockerfile.
+#Here, ./frontend means: look for a folder named frontend in the same directory where your docker-compose.yml file is located.
+#Inside that folder, Docker expects a Dockerfile.
